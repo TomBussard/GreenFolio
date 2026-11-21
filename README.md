@@ -2,6 +2,12 @@
 
 GreenFolio explores what happens to a portfolio when you change a sustainability preference. A user chooses a risk profile and an environmental, social or broader ESG preference, then inspects the holdings and their historical performance.
 
+## Portfolio builder
+
+I can work through four views in the live application. **Profile** sets the risk profile and sustainability preference. **Portfolio** shows the eligible equity universe by category and lets me pick holdings and edit weights until they total 100%. **ESG exposures** displays gauges, the component profile and sector exposure. **Risk analysis** compares dated performance with a benchmark, plots the holdings in risk and return space and reports the portfolio's drawdown, Sharpe, beta and alpha when price histories are available.
+
+The opening offline comparison runs all four sustainability filters on the same eight names. The investment mix shown in the risk questionnaire provides context for the profile. The saved equity weights are the ones used to calculate exposures and historical equity returns. [Portfolio controls](app.py) · [Benchmarks and profiles](config.py) · [Charts](visualization.py)
+
 ## Follow the portfolio
 
 The profile determines the investment preferences. The construction view filters the equity universe and builds the allocation. Two further views show the portfolio's ESG exposures and its return, volatility and drawdown against a selected benchmark.
@@ -47,6 +53,41 @@ The builder suggests equal weights for the selected holdings and lets the user e
 For example, A and C have total scores of 17 and 13, so their equal-weight total is 15. The social selection improves the average social score by 2.25 points while doubling the environmental score. These quantities use only the fictional score data. In the historical view the app uses closing prices, applies the chosen weights to daily stock returns and compounds the result from a base of 100. [Screen inputs](example.py) · [Exposure and return calculations](data_manager.py)
 
 The opening **Screen comparison** runs offline. **Portfolio builder** uses provider data when available. Missing provider scores are excluded by default. A sidebar switch can include clearly identified illustrative defaults to explore how missing data change the investable universe. [Exact selection rules](screening.py) · [Market data and performance metrics](data_manager.py) · [Portfolio charts](visualization.py)
+
+## What the risk dashboard calculates
+
+The historical view uses the tickers with available price histories and renormalises their chosen weights. On dates with observations for the component returns $r_{i,t}$, the portfolio applies those weights each day and compounds from 100.
+
+```math
+\tilde w_i=w_i\Big/\sum_{j\in V}w_j,\qquad r_{P,t}=\sum_{i\in V}\tilde w_i r_{i,t},\qquad I_t=100\prod_{s\le t}(1+r_{P,s}).
+```
+
+For the summary statistics the implementation compounds the **average daily return** over 252 days. The Sharpe ratio subtracts a 2% annual rate in daily units. Drawdown compares each observed index level with its running high.
+
+```math
+R_a=(1+\bar r_P)^{252}-1,\qquad
+S=\sqrt{252}\,\frac{\bar r_P-0.02/252}{\mathrm{sd}(r_P)},\qquad
+DD_t=I_t/\max_{s\le t}I_s-1.
+```
+
+When benchmark returns are available, beta measures sensitivity to them. Alpha compares the portfolio's annualised return with the return implied by that beta and the same risk-free rate.
+
+```math
+\beta=\frac{\mathrm{Cov}(r_P,r_B)}{\mathrm{Var}(r_B)},\qquad
+\alpha=R_a-0.02-\beta(R_{B,a}-0.02).
+```
+
+I checked the risk function offline with four portfolio returns of **+1%, −2%, +1.5% and −0.5%** and a benchmark that moves half as much every day. The function returns **beta 2.00**, **maximum drawdown −2.00%** and **annualised volatility 25.10%**. The arithmetic mean is exactly zero, yet the compounded path finishes at **99.9624**. This small example lets me check both the risk calculations and the distinction between compounding a path and annualising its average.
+
+```python
+import pandas as pd
+from data_manager import calculate_metrics
+
+daily = pd.Series([0.01, -0.02, 0.015, -0.005])
+print(calculate_metrics(daily, daily / 2))
+```
+
+[Portfolio series and risk calculations](data_manager.py) · [Chart construction](visualization.py)
 
 ## Run locally
 
