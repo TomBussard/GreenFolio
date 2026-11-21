@@ -2,6 +2,8 @@
 Gestion des données financières et ESG
 """
 
+from screening import filter_stocks_by_preference
+
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -14,59 +16,6 @@ from functools import lru_cache
 # Configuration du logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-def filter_stocks_by_preference(stocks: List[Dict], preference: str) -> List[Dict]:
-    """
-    Filtre les actions en fonction de la préférence durable
-    Scores ESG de Yahoo Finance : plus le score est bas, meilleure est la performance ESG
-    """
-    if not stocks:
-        return []
-
-    filtered_stocks = []
-    
-    for stock in stocks:
-        env_score = stock.get("env", stock.get("environmental_score", 0))
-        soc_score = stock.get("soc", stock.get("social_score", 0))
-        gov_score = stock.get("gov", stock.get("governance_score", 0))
-        total_score = stock.get("total", stock.get("esg_score", 0))
-        
-        if preference == "Net Zéro":
-            # Critères pour Net Zéro:
-            # - Score environnemental excellent (< 4, basé sur les meilleures performances)
-            # - Score total bon (< 20, médiane observée)
-            # - Autres scores acceptables
-            if (env_score < 4.0 and  # Les meilleurs scores env sont entre 0.4 et 3.0
-                total_score < 20.0 and  # La médiane est autour de 20
-                max(soc_score, gov_score) < 12.0):  # Scores sociaux et gouvernance raisonnables
-                filtered_stocks.append(stock)
-                
-        elif preference == "Multi-thématique ESG":
-            # Critères pour Multi-thématique:
-            # - Score total modéré
-            # - Tous les scores individuels équilibrés
-            if (total_score < 22.0 and  # Plus permissif sur le total
-                max(env_score, soc_score, gov_score) < 10.0 and  # Équilibre des scores
-                (env_score < 8.0 or soc_score < 8.0 or gov_score < 5.0)):  # Au moins un bon score
-                filtered_stocks.append(stock)
-                
-        elif preference == "Solidaire":
-            # Critères pour Solidaire:
-            # - Focus sur le score social
-            # - Bonne gouvernance
-            if (soc_score < 8.0 and  # Les bons scores sociaux sont < 8
-                gov_score < 6.0 and  # Gouvernance solide
-                total_score < 25.0):  # Score total acceptable
-                filtered_stocks.append(stock)
-        else:
-            # Filtre par défaut:
-            # - Score total raisonnable
-            # - Pas de très mauvais scores individuels
-            if (total_score < 25.0 and
-                max(env_score, soc_score, gov_score) < 15.0):
-                filtered_stocks.append(stock)
-            
-    return filtered_stocks
 
 @st.cache_data(ttl=3600)
 def get_stock_data(ticker: str) -> Optional[Dict]:
