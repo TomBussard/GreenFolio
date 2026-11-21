@@ -1,11 +1,16 @@
 """Apply the sustainability screens used by the Streamlit portfolio builder."""
+
 from math import isfinite
 
 
 def filter_stocks_by_preference(stocks, preference):
     selected = []
-    fields = [("env", "environmental_score"), ("soc", "social_score"),
-              ("gov", "governance_score"), ("total", "esg_score")]
+    fields = [
+        ("env", "environmental_score"),
+        ("soc", "social_score"),
+        ("gov", "governance_score"),
+        ("total", "esg_score"),
+    ]
     for stock in stocks or []:
         values = [stock.get(short, stock.get(long)) for short, long in fields]
         try:
@@ -26,4 +31,3 @@ def filter_stocks_by_preference(stocks, preference):
         if keep:
             selected.append(stock)
     return selected
-

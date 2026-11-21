@@ -2,17 +2,20 @@
 Configuration de l'application
 """
 
-# Liste des actions durables par défaut
+# List of durable actions by default
 DEFAULT_TICKERS = {
     "Technologies": {
         "AAPL": {"name": "Apple Inc.", "default_profiles": ["Équilibré", "Dynamique"]},
-        "MSFT": {"name": "Microsoft Corp.", "default_profiles": ["Prudent", "Équilibré", "Dynamique"]},
+        "MSFT": {
+            "name": "Microsoft Corp.",
+            "default_profiles": ["Prudent", "Équilibré", "Dynamique"],
+        },
         "GOOGL": {"name": "Alphabet Inc.", "default_profiles": ["Dynamique"]},
         "NVDA": {"name": "NVIDIA Corp.", "default_profiles": ["Dynamique"]},
         "CRM": {"name": "Salesforce", "default_profiles": ["Équilibré", "Dynamique"]},
         "ADBE": {"name": "Adobe Inc.", "default_profiles": ["Dynamique"]},
         "CSCO": {"name": "Cisco Systems", "default_profiles": ["Prudent", "Équilibré"]},
-        "INTC": {"name": "Intel Corporation", "default_profiles": ["Prudent", "Équilibré"]}
+        "INTC": {"name": "Intel Corporation", "default_profiles": ["Prudent", "Équilibré"]},
     },
     "Énergies Renouvelables": {
         "ENPH": {"name": "Enphase Energy", "default_profiles": ["Dynamique"]},
@@ -20,14 +23,14 @@ DEFAULT_TICKERS = {
         "NEE": {"name": "NextEra Energy", "default_profiles": ["Prudent", "Équilibré"]},
         "FSLR": {"name": "First Solar", "default_profiles": ["Dynamique"]},
         "RUN": {"name": "Sunrun Inc.", "default_profiles": ["Dynamique"]},
-        "BEP": {"name": "Brookfield Renewable", "default_profiles": ["Prudent", "Équilibré"]}
+        "BEP": {"name": "Brookfield Renewable", "default_profiles": ["Prudent", "Équilibré"]},
     },
     "Mobilité Durable": {
         "TSLA": {"name": "Tesla Inc.", "default_profiles": ["Dynamique"]},
         "NIO": {"name": "NIO Inc.", "default_profiles": ["Dynamique"]},
         "RIVN": {"name": "Rivian Automotive", "default_profiles": ["Dynamique"]},
         "ALB": {"name": "Albemarle Corporation", "default_profiles": ["Équilibré"]},
-        "GM": {"name": "General Motors", "default_profiles": ["Équilibré"]}
+        "GM": {"name": "General Motors", "default_profiles": ["Équilibré"]},
     },
     "Santé": {
         "JNJ": {"name": "Johnson & Johnson", "default_profiles": ["Prudent", "Équilibré"]},
@@ -37,7 +40,7 @@ DEFAULT_TICKERS = {
         "DHR": {"name": "Danaher Corporation", "default_profiles": ["Équilibré"]},
         "TMO": {"name": "Thermo Fisher Scientific", "default_profiles": ["Équilibré"]},
         "ISRG": {"name": "Intuitive Surgical", "default_profiles": ["Dynamique"]},
-        "GILD": {"name": "Gilead Sciences", "default_profiles": ["Prudent", "Équilibré"]}
+        "GILD": {"name": "Gilead Sciences", "default_profiles": ["Prudent", "Équilibré"]},
     },
     "Finance Durable": {
         "BLK": {"name": "BlackRock Inc.", "default_profiles": ["Prudent", "Équilibré"]},
@@ -47,7 +50,7 @@ DEFAULT_TICKERS = {
         "V": {"name": "Visa Inc.", "default_profiles": ["Prudent", "Équilibré"]},
         "MA": {"name": "Mastercard", "default_profiles": ["Équilibré"]},
         "SPGI": {"name": "S&P Global", "default_profiles": ["Équilibré"]},
-        "SCHW": {"name": "Charles Schwab", "default_profiles": ["Équilibré"]}
+        "SCHW": {"name": "Charles Schwab", "default_profiles": ["Équilibré"]},
     },
     "Économie Circulaire": {
         "WM": {"name": "Waste Management", "default_profiles": ["Prudent"]},
@@ -64,7 +67,7 @@ DEFAULT_TICKERS = {
         "PNR": {"name": "Pentair", "default_profiles": ["Équilibré"]},
         "VIE": {"name": "Veolia Environnement", "default_profiles": ["Prudent"]},
         "ECL": {"name": "Ecolab Inc.", "default_profiles": ["Équilibré"]},
-        "IEX": {"name": "IDEX Corporation", "default_profiles": ["Équilibré"]}
+        "IEX": {"name": "IDEX Corporation", "default_profiles": ["Équilibré"]},
     },
     "Agriculture Durable": {
         "ADM": {"name": "Archer-Daniels-Midland", "default_profiles": ["Prudent"]},
@@ -74,7 +77,7 @@ DEFAULT_TICKERS = {
         "FMC": {"name": "FMC Corporation", "default_profiles": ["Équilibré"]},
         "SMG": {"name": "Scotts Miracle-Gro", "default_profiles": ["Dynamique"]},
         "AGCO": {"name": "AGCO Corporation", "default_profiles": ["Équilibré"]},
-        "TSN": {"name": "Tyson Foods", "default_profiles": ["Prudent"]}
+        "TSN": {"name": "Tyson Foods", "default_profiles": ["Prudent"]},
     },
     "Construction Durable": {
         "CAT": {"name": "Caterpillar Inc.", "default_profiles": ["Équilibré"]},
@@ -84,60 +87,60 @@ DEFAULT_TICKERS = {
         "JCI": {"name": "Johnson Controls", "default_profiles": ["Équilibré"]},
         "GNRC": {"name": "Generac Holdings", "default_profiles": ["Dynamique"]},
         "LIN": {"name": "Linde plc", "default_profiles": ["Prudent", "Équilibré"]},
-        "SHW": {"name": "Sherwin-Williams", "default_profiles": ["Équilibré"]}
-    }
+        "SHW": {"name": "Sherwin-Williams", "default_profiles": ["Équilibré"]},
+    },
 }
-# Profils de risque prédéfinis
+# Predefined risk profiles
 RISK_PROFILES = {
     "Prudent": {
         "actions": 0.30,
         "obligations": 0.60,
         "monétaire": 0.10,
         "volatilité_max": 10,
-        "description": "Privilégie la sécurité du capital avec une exposition limitée aux actions"
+        "description": "A smaller equity allocation limits exposure to market swings.",
     },
     "Équilibré": {
         "actions": 0.60,
         "obligations": 0.35,
         "monétaire": 0.05,
         "volatilité_max": 15,
-        "description": "Recherche un compromis entre rendement et risque"
+        "description": "A mix of equities and bonds balances risk and return.",
     },
     "Dynamique": {
         "actions": 0.90,
         "obligations": 0.10,
         "monétaire": 0.00,
         "volatilité_max": 25,
-        "description": "Maximise le rendement potentiel avec une forte exposition aux actions"
-    }
+        "description": "A higher equity allocation accepts larger swings in value.",
+    },
 }
 
-# Préférences durables
+# Durable preferences
 SUSTAINABILITY_PREFERENCES = {
     "Net Zéro": {
         "exclusions": ["coal", "oil", "gas"],
         "min_environmental_score": 70,
-        "description": "Vise la neutralité carbone, exclut les énergies fossiles"
+        "description": "Emphasises lower environmental risk alongside total ESG risk.",
     },
     "Multi-thématique ESG": {
         "min_esg_score": 60,
         "balanced_weights": True,
-        "description": "Approche équilibrée sur les critères ESG"
+        "description": "Combines environmental, social and governance risk thresholds.",
     },
     "Solidaire": {
         "min_social_score": 70,
         "impact_focus": True,
-        "description": "Privilégie l'impact social positif"
-    }
+        "description": "Focuses on social and governance risk scores.",
+    },
 }
 
-# Paramètres de visualisation
+# Visualization parameters
 CHART_COLORS = {
     "green": "#2ecc71",
     "red": "#e74c3c",
     "blue": "#3498db",
     "orange": "#f39c12",
-    "purple": "#9b59b6"
+    "purple": "#9b59b6",
 }
 
 # Benchmarks disponibles
@@ -146,12 +149,12 @@ BENCHMARKS = {
     "NASDAQ Composite": "^IXIC",
     "Dow Jones": "^DJI",
     "MSCI World": "URTH",
-    "MSCI ESG Leaders": "SUSA"
+    "MSCI ESG Leaders": "SUSA",
 }
 
-# Benchmark par défaut selon le profil
+# Default Benchmark by Profile
 DEFAULT_BENCHMARKS = {
-    "Prudent": "^GSPC",  # S&P 500 pour profil prudent
-    "Équilibré": "URTH", # MSCI World pour profil équilibré
-    "Dynamique": "^IXIC" # NASDAQ pour profil dynamique
+    "Prudent": "^GSPC",  # S&P 500 for careful profile
+    "Équilibré": "URTH",  # MSCI World for Balanced Profile
+    "Dynamique": "^IXIC",  # NASDAQ for dynamic profile
 }
